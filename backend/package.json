@@ -1,0 +1,13 @@
+{
+  "name": "tswheels-backend",
+  "version": "1.0.0",
+  "description": "Backend for Vehicle Rental System",
+  "main": "server.cjs",
+  "scripts": {
+    "start": "node server.cjs"
+  },
+  "dependencies": {
+    "json-server": "^0.17.4",
+    "tswheels-monorepo": "file:.."
+  }
+}
