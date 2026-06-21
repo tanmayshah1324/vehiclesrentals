@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: tswheels-backend
+    env: node
+    rootDir: backend
+    buildCommand: npm install --production
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: EASEBUZZ_KEY
+        sync: false
+      - key: EASEBUZZ_SALT
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false

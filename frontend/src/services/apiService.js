@@ -1,6 +1,6 @@
 import { supabase } from '../lib/supabaseClient';
 
-const LOCAL_API_URL = 'http://localhost:3001';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
 // Helper to determine if we use Supabase
 const useSupabase = () => !!supabase;
@@ -307,7 +307,7 @@ export const apiService = {
             }
 
             async function fallbackLogin() {
-                const response = await fetch(`${LOCAL_API_URL}/login`, {
+                const response = await fetch(`${API_URL}/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, password })
@@ -372,7 +372,7 @@ export const apiService = {
             }
 
             async function fallbackSignup() {
-                const response = await fetch(`${LOCAL_API_URL}/signup`, {
+                const response = await fetch(`${API_URL}/signup`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ name, email, password })
@@ -400,7 +400,7 @@ export const apiService = {
             return runQuery(
                 () => supabase.from('vehicles').select('*'),
                 async () => {
-                    const response = await fetch(`${LOCAL_API_URL}/vehicles`);
+                    const response = await fetch(`${API_URL}/vehicles`);
                     return await response.json();
                 },
                 (data) => data.map(mapVehicleToFrontend)
@@ -411,7 +411,7 @@ export const apiService = {
             return runQuery(
                 () => supabase.from('vehicles').select('*').eq('id', id).single(),
                 async () => {
-                    const response = await fetch(`${LOCAL_API_URL}/vehicles/${id}`);
+                    const response = await fetch(`${API_URL}/vehicles/${id}`);
                     return await response.json();
                 },
                 mapVehicleToFrontend
@@ -422,7 +422,7 @@ export const apiService = {
             return runWrite(
                 () => supabase.from('vehicles').insert(mapVehicleToBackend(vehicle)).select().single(),
                 async () => {
-                    const response = await fetch(`${LOCAL_API_URL}/vehicles`, {
+                    const response = await fetch(`${API_URL}/vehicles`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(vehicle)
@@ -437,7 +437,7 @@ export const apiService = {
             return runWrite(
                 () => supabase.from('vehicles').update(mapVehicleToBackend(vehicle)).eq('id', id).select().single(),
                 async () => {
-                    const response = await fetch(`${LOCAL_API_URL}/vehicles/${id}`, {
+                    const response = await fetch(`${API_URL}/vehicles/${id}`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(vehicle)
@@ -452,7 +452,7 @@ export const apiService = {
             return runWrite(
                 () => supabase.from('vehicles').delete().eq('id', id),
                 async () => {
-                    const response = await fetch(`${LOCAL_API_URL}/vehicles/${id}`, {
+                    const response = await fetch(`${API_URL}/vehicles/${id}`, {
                         method: 'DELETE'
                     });
                     return response.ok;
@@ -465,7 +465,7 @@ export const apiService = {
             return runWrite(
                 () => supabase.from('vehicles').update({ availability }).eq('id', id),
                 async () => {
-                    const response = await fetch(`${LOCAL_API_URL}/vehicles/${id}`, {
+                    const response = await fetch(`${API_URL}/vehicles/${id}`, {
                         method: 'PATCH',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ availability })
@@ -483,7 +483,7 @@ export const apiService = {
             return runQuery(
                 () => supabase.from('bookings').select('*'),
                 async () => {
-                    const response = await fetch(`${LOCAL_API_URL}/bookings`);
+                    const response = await fetch(`${API_URL}/bookings`);
                     return await response.json();
                 },
                 (data) => data.map(mapBookingToFrontend)
@@ -494,7 +494,7 @@ export const apiService = {
             return runQuery(
                 () => supabase.from('bookings').select('*').eq('user_id', userId),
                 async () => {
-                    const response = await fetch(`${LOCAL_API_URL}/bookings?userId=${userId}`);
+                    const response = await fetch(`${API_URL}/bookings?userId=${userId}`);
                     return await response.json();
                 },
                 (data) => data.map(mapBookingToFrontend)
@@ -505,7 +505,7 @@ export const apiService = {
             return runWrite(
                 () => supabase.from('bookings').insert(mapBookingToBackend(booking)).select().single(),
                 async () => {
-                    const response = await fetch(`${LOCAL_API_URL}/bookings`, {
+                    const response = await fetch(`${API_URL}/bookings`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(booking)
@@ -520,7 +520,7 @@ export const apiService = {
             return runWrite(
                 () => supabase.from('bookings').update({ status }).eq('id', id),
                 async () => {
-                    const response = await fetch(`${LOCAL_API_URL}/bookings/${id}`, {
+                    const response = await fetch(`${API_URL}/bookings/${id}`, {
                         method: 'PATCH',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ status })
@@ -535,7 +535,7 @@ export const apiService = {
             return runWrite(
                 () => supabase.from('bookings').delete().eq('id', id),
                 async () => {
-                    const response = await fetch(`${LOCAL_API_URL}/bookings/${id}`, {
+                    const response = await fetch(`${API_URL}/bookings/${id}`, {
                         method: 'DELETE'
                     });
                     return response.ok;
@@ -558,7 +558,7 @@ export const apiService = {
 
         sendConfirmationEmail: async (toEmail, bookingDetails) => {
             try {
-                const response = await fetch(`${LOCAL_API_URL}/api/send-email`, {
+                const response = await fetch(`${API_URL}/api/send-email`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -593,7 +593,7 @@ export const apiService = {
             return runQuery(
                 () => supabase.from('profiles').select('*'),
                 async () => {
-                    const response = await fetch(`${LOCAL_API_URL}/users`);
+                    const response = await fetch(`${API_URL}/users`);
                     return await response.json();
                 },
                 (data) => {
@@ -643,7 +643,7 @@ export const apiService = {
             return runQuery(
                 () => supabase.from('settings').select('*').eq('id', 'global').maybeSingle(),
                 async () => {
-                    const response = await fetch(`${LOCAL_API_URL}/settings`);
+                    const response = await fetch(`${API_URL}/settings`);
                     const data = await response.json();
                     return Array.isArray(data) ? data[0] : data;
                 },
@@ -655,7 +655,7 @@ export const apiService = {
             return runWrite(
                 () => supabase.from('settings').upsert(mapSettingsToBackend(settings)).select().single(),
                 async () => {
-                    const response = await fetch(`${LOCAL_API_URL}/settings`, {
+                    const response = await fetch(`${API_URL}/settings`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(mapSettingsToBackend(settings))
@@ -672,7 +672,7 @@ export const apiService = {
             return runQuery(
                 () => supabase.from('ads').select('*'),
                 async () => {
-                    const response = await fetch(`${LOCAL_API_URL}/ads`);
+                    const response = await fetch(`${API_URL}/ads`);
                     return await response.json();
                 }
             );
@@ -684,7 +684,7 @@ export const apiService = {
             return runQuery(
                 () => supabase.from('vehicle_categories').select('*'),
                 async () => {
-                    const response = await fetch(`${LOCAL_API_URL}/categories`);
+                    const response = await fetch(`${API_URL}/categories`);
                     return await response.json();
                 },
                 (data) => data.map(mapCategoryToFrontend)
@@ -694,7 +694,7 @@ export const apiService = {
             return runWrite(
                 () => supabase.from('vehicle_categories').insert(mapCategoryToBackend(category)).select().single(),
                 async () => {
-                    const response = await fetch(`${LOCAL_API_URL}/categories`, {
+                    const response = await fetch(`${API_URL}/categories`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(category)
@@ -708,7 +708,7 @@ export const apiService = {
             return runWrite(
                 () => supabase.from('vehicle_categories').update(mapCategoryToBackend(category)).eq('id', id).select().single(),
                 async () => {
-                    const response = await fetch(`${LOCAL_API_URL}/categories/${id}`, {
+                    const response = await fetch(`${API_URL}/categories/${id}`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(category)
@@ -722,7 +722,7 @@ export const apiService = {
             return runWrite(
                 () => supabase.from('vehicle_categories').delete().eq('id', id),
                 async () => {
-                    const response = await fetch(`${LOCAL_API_URL}/categories/${id}`, {
+                    const response = await fetch(`${API_URL}/categories/${id}`, {
                         method: 'DELETE'
                     });
                     return response.ok;
@@ -737,7 +737,7 @@ export const apiService = {
             return runQuery(
                 () => supabase.from('rental_hubs').select('*'),
                 async () => {
-                    const response = await fetch(`${LOCAL_API_URL}/hubs`);
+                    const response = await fetch(`${API_URL}/hubs`);
                     return await response.json();
                 },
                 (data) => data.map(mapHubToFrontend)
@@ -747,7 +747,7 @@ export const apiService = {
             return runWrite(
                 () => supabase.from('rental_hubs').insert(mapHubToBackend(hub)).select().single(),
                 async () => {
-                    const response = await fetch(`${LOCAL_API_URL}/hubs`, {
+                    const response = await fetch(`${API_URL}/hubs`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(hub)
@@ -761,7 +761,7 @@ export const apiService = {
             return runWrite(
                 () => supabase.from('rental_hubs').update(mapHubToBackend(hub)).eq('id', id).select().single(),
                 async () => {
-                    const response = await fetch(`${LOCAL_API_URL}/hubs/${id}`, {
+                    const response = await fetch(`${API_URL}/hubs/${id}`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(hub)
@@ -775,7 +775,7 @@ export const apiService = {
             return runWrite(
                 () => supabase.from('rental_hubs').delete().eq('id', id),
                 async () => {
-                    const response = await fetch(`${LOCAL_API_URL}/hubs/${id}`, {
+                    const response = await fetch(`${API_URL}/hubs/${id}`, {
                         method: 'DELETE'
                     });
                     return response.ok;
