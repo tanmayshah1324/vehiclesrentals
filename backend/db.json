@@ -63,7 +63,7 @@
           "Rear Camera"
         ]
       },
-      "availability": true,
+      "availability": false,
       "rating": 4.5,
       "reviews": 95
     },
@@ -95,7 +95,7 @@
           "Bluetooth"
         ]
       },
-      "availability": true,
+      "availability": false,
       "rating": 4.3,
       "reviews": 78
     },
@@ -127,7 +127,7 @@
           "Bluetooth"
         ]
       },
-      "availability": true,
+      "availability": false,
       "rating": 4.2,
       "reviews": 130
     },
@@ -159,7 +159,7 @@
           "Bluetooth"
         ]
       },
-      "availability": false,
+      "availability": true,
       "rating": 4.8,
       "reviews": 65
     },
@@ -187,39 +187,202 @@
           "Helmet Included"
         ]
       },
-      "availability": true,
+      "availability": false,
       "rating": 4.6,
       "reviews": 110
     }
   ],
   "bookings": [
     {
-      "id": "1778606263032",
-      "userId": "3",
+      "id": "1781012861765",
+      "userId": "2",
+      "vehicleId": "3",
+      "vehicleName": "Tata Nexon",
+      "startDate": "2026-06-09",
+      "endDate": "2026-06-10",
+      "totalPrice": "605.00",
+      "status": "confirmed",
+      "paymentMethod": "upi",
+      "transactionId": "UPI1781012861765",
+      "createdAt": "2026-06-09T13:47:41.765Z"
+    },
+    {
+      "id": "1781014908972",
+      "userId": "1781014888949",
+      "vehicleId": "6",
+      "vehicleName": "Royal Enfield Classic 350",
+      "startDate": "2026-06-09",
+      "endDate": "2026-06-10",
+      "totalPrice": "330.00",
+      "status": "cancelled",
+      "paymentMethod": "upi",
+      "transactionId": "UPI1781014908972",
+      "createdAt": "2026-06-09T14:21:48.972Z"
+    },
+    {
+      "id": "1781015648197",
+      "userId": "8e116cb8-1615-4c30-b19c-89406509a5cd",
+      "vehicleId": "4",
+      "vehicleName": "Maruti Swift",
+      "startDate": "2026-06-09",
+      "endDate": "2026-06-10",
+      "totalPrice": "495.00",
+      "status": "cancelled",
+      "paymentMethod": "upi",
+      "transactionId": "UPI1781015648197",
+      "createdAt": "2026-06-09T14:34:08.197Z"
+    },
+    {
+      "id": "1781017136783",
+      "userId": "8e116cb8-1615-4c30-b19c-89406509a5cd",
+      "vehicleId": "6",
+      "vehicleName": "Royal Enfield Classic 350",
+      "startDate": "2026-06-09",
+      "endDate": "2026-06-10",
+      "totalPrice": "330.00",
+      "status": "confirmed",
+      "paymentMethod": "upi",
+      "transactionId": "UPI1781017136783",
+      "createdAt": "2026-06-09T14:58:56.783Z"
+    },
+    {
+      "id": "1781017680329",
+      "userId": "8e116cb8-1615-4c30-b19c-89406509a5cd",
       "vehicleId": "2",
       "vehicleName": "Hyundai Creta",
-      "startDate": "2026-05-12",
-      "endDate": "2026-05-13",
+      "startDate": "2026-06-09",
+      "endDate": "2026-06-10",
       "totalPrice": "715.00",
       "status": "confirmed",
       "paymentMethod": "upi",
-      "transactionId": "TXN1778606263029",
-      "createdAt": "2026-05-12T17:17:43.032Z"
+      "transactionId": "UPI1781017680329",
+      "createdAt": "2026-06-09T15:08:00.329Z"
+    },
+    {
+      "id": "1781018655859",
+      "userId": "8e116cb8-1615-4c30-b19c-89406509a5cd",
+      "vehicleId": "3",
+      "vehicleName": "Tata Nexon",
+      "startDate": "2026-06-09",
+      "endDate": "2026-06-10",
+      "totalPrice": "605.00",
+      "status": "confirmed",
+      "paymentMethod": "upi",
+      "transactionId": "UPI1781018655859",
+      "createdAt": "2026-06-09T15:24:15.859Z"
+    },
+    {
+      "id": "1781019109825",
+      "userId": "8e116cb8-1615-4c30-b19c-89406509a5cd",
+      "vehicleId": "4",
+      "vehicleName": "Maruti Swift",
+      "startDate": "2026-06-09",
+      "endDate": "2026-06-10",
+      "totalPrice": "495.00",
+      "status": "confirmed",
+      "paymentMethod": "upi",
+      "transactionId": "UPI1781019109825",
+      "createdAt": "2026-06-09T15:31:49.825Z"
+    },
+    {
+      "id": "1781019291638",
+      "userId": "8e116cb8-1615-4c30-b19c-89406509a5cd",
+      "vehicleId": "5",
+      "vehicleName": "Mahindra Thar",
+      "startDate": "2026-06-09",
+      "endDate": "2026-06-10",
+      "totalPrice": "825.00",
+      "status": "confirmed",
+      "paymentMethod": "upi",
+      "transactionId": "UPI1781019291638",
+      "createdAt": "2026-06-09T15:34:51.638Z"
+    },
+    {
+      "id": "1781020616071",
+      "userId": "8e116cb8-1615-4c30-b19c-89406509a5cd",
+      "vehicleId": "1",
+      "vehicleName": "Toyota Innova Crysta",
+      "startDate": "2026-06-09",
+      "endDate": "2026-06-10",
+      "totalPrice": "2896.00",
+      "status": "confirmed",
+      "paymentMethod": "upi",
+      "transactionId": "UPI1781020616071",
+      "createdAt": "2026-06-09T15:56:56.071Z"
+    },
+    {
+      "id": "1781021652155",
+      "userId": "8e116cb8-1615-4c30-b19c-89406509a5cd",
+      "vehicleId": "6",
+      "vehicleName": "Royal Enfield Classic 350",
+      "startDate": "2026-06-09",
+      "endDate": "2026-06-09",
+      "totalPrice": "2056.00",
+      "status": "confirmed",
+      "paymentMethod": "upi",
+      "transactionId": "UPI1781021652155",
+      "createdAt": "2026-06-09T16:14:12.155Z"
+    },
+    {
+      "id": "1781021937257",
+      "userId": "8e116cb8-1615-4c30-b19c-89406509a5cd",
+      "vehicleId": "2",
+      "vehicleName": "Hyundai Creta",
+      "startDate": "2026-06-09",
+      "endDate": "2026-06-10",
+      "totalPrice": "19024.00",
+      "status": "confirmed",
+      "paymentMethod": "upi",
+      "transactionId": "UPI1781021937257",
+      "createdAt": "2026-06-09T16:18:57.257Z"
+    },
+    {
+      "id": "1782017603240",
+      "userId": "8e116cb8-1615-4c30-b19c-89406509a5cd",
+      "vehicleId": "3",
+      "vehicleName": "Tata Nexon",
+      "startDate": "2026-06-21",
+      "endDate": "2026-06-22",
+      "totalPrice": "2616.00",
+      "status": "confirmed",
+      "paymentMethod": "upi",
+      "transactionId": "UPI1782017603240",
+      "createdAt": "2026-06-21T04:53:23.240Z"
+    },
+    {
+      "id": "1782017808098",
+      "userId": "8e116cb8-1615-4c30-b19c-89406509a5cd",
+      "vehicleId": "4",
+      "vehicleName": "Maruti Swift",
+      "startDate": "2026-06-21",
+      "endDate": "2026-06-22",
+      "totalPrice": "2504.00",
+      "status": "confirmed",
+      "paymentMethod": "creditCard",
+      "transactionId": "TXN1782017808098",
+      "createdAt": "2026-06-21T04:56:48.098Z"
     }
   ],
   "users": [
     {
       "id": "1",
+      "name": "Admin User",
       "email": "admin@example.com",
       "password": "admin123",
-      "name": "Admin User",
       "role": "admin"
     },
     {
       "id": "2",
+      "name": "Test User",
       "email": "user@example.com",
       "password": "user123",
-      "name": "Demo User",
+      "role": "user"
+    },
+    {
+      "id": "1781014888949",
+      "email": "shahtanmay132@gmail.com",
+      "password": "Vehicle1324@",
+      "name": "Tanmay shah",
       "role": "user"
     }
   ],
@@ -239,6 +402,17 @@
       "image": "https://images.unsplash.com/photo-1558981403-c5f91cbba527?auto=format&fit=crop&q=80&w=1000",
       "color": "from-orange-500 to-red-600",
       "link": "/vehicles?type=bike"
+    }
+  ],
+  "settings": [
+    {
+      "id": "global",
+      "system_name": "TSWheels",
+      "contact_email": "support@tswheels.com",
+      "tax_rate": 12,
+      "security_deposit": 2000,
+      "terms_and_conditions": "By renting a vehicle, you agree to return it in the same condition as received. A security deposit is required.",
+      "maintenance_mode": false
     }
   ]
 }

@@ -122,14 +122,67 @@ const BookingForm: React.FC = () => {
     }
 
     try {
-      // Simulate Payment
       setIsProcessingPayment(true);
       const totalAmount = (totalPrice * 1.1).toFixed(2);
+      const txnid = 'TXN' + Date.now();
       
+      if (paymentMethod === 'creditCard') {
+        // --- Easebuzz Integration ---
+        const productinfo = `Booking for ${vehicle.name}`;
+        
+        // 1. Initiate Payment via Backend
+        const initiateResponse = await fetch('http://localhost:3001/api/easebuzz/initiate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            txnid,
+            amount: totalAmount,
+            productinfo,
+            firstname: formData.firstName,
+            email: formData.email,
+            phone: formData.phone
+          })
+        });
+        const easebuzzData = await initiateResponse.json();
+
+        if (easebuzzData.status === 1 && easebuzzData.data) {
+          // Save pending booking
+          const bookingData = {
+            id: txnid,
+            userId: user?.id,
+            vehicleId: vehicle.id,
+            vehicleName: vehicle.name,
+            startDate: formData.startDate,
+            endDate: formData.endDate,
+            totalPrice: totalAmount,
+            status: 'pending',
+            paymentMethod,
+            transactionId: txnid,
+            createdAt: new Date().toISOString()
+          };
+
+          await fetch('http://localhost:3001/bookings', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(bookingData)
+          });
+
+          // Redirect to Easebuzz Hosted Checkout
+          window.location.href = `https://testpay.easebuzz.in/pay/${easebuzzData.data}`;
+          return;
+        } else {
+          toast.error('Failed to initiate payment. Please try again.');
+          setIsProcessingPayment(false);
+          setIsSubmitting(false);
+          return;
+        }
+      }
+
+      // Simulate UPI Payment
       const paymentResponse = await fetch('http://localhost:3001/simulate-upi-payment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount: totalAmount, upiId: paymentMethod === 'upi' ? upiId : 'CARD' })
+        body: JSON.stringify({ amount: totalAmount, upiId: upiId })
       });
       
       const paymentData = await paymentResponse.json();
