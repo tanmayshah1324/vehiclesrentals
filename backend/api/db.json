@@ -1,0 +1,418 @@
+{
+  "vehicles": [
+    {
+      "id": "1",
+      "name": "Toyota Innova Crysta",
+      "type": "car",
+      "brand": "Toyota",
+      "model": "Innova Crysta",
+      "year": 2023,
+      "images": [
+        "https://static3.toyotabharat.com/images/showroom/innova-mmc/unmatched-unrivaled-banner1600x850.jpg"
+      ],
+      "price": {
+        "hourly": 150,
+        "daily": 800,
+        "weekly": 4500
+      },
+      "specifications": {
+        "seats": 7,
+        "fuelType": "Diesel",
+        "transmission": "Automatic",
+        "engineCapacity": "2.4L",
+        "mileage": "14 km/l",
+        "features": [
+          "AC",
+          "Power Steering",
+          "Power Windows",
+          "GPS Navigation",
+          "Bluetooth",
+          "Rear Camera"
+        ]
+      },
+      "availability": true,
+      "rating": 4.7,
+      "reviews": 120
+    },
+    {
+      "id": "2",
+      "name": "Hyundai Creta",
+      "type": "car",
+      "brand": "Hyundai",
+      "model": "Creta",
+      "year": 2022,
+      "images": [
+        "https://stimg.cardekho.com/images/carexteriorimages/930x620/Hyundai/Creta/8667/1744281746048/side-view-(left)-90.jpg?impolicy=resize&imwidth=420"
+      ],
+      "price": {
+        "hourly": 120,
+        "daily": 650,
+        "weekly": 3800
+      },
+      "specifications": {
+        "seats": 5,
+        "fuelType": "Petrol",
+        "transmission": "Manual",
+        "engineCapacity": "1.5L",
+        "mileage": "17 km/l",
+        "features": [
+          "AC",
+          "Power Steering",
+          "Power Windows",
+          "Bluetooth",
+          "Rear Camera"
+        ]
+      },
+      "availability": false,
+      "rating": 4.5,
+      "reviews": 95
+    },
+    {
+      "id": "3",
+      "name": "Tata Nexon",
+      "type": "car",
+      "brand": "Tata",
+      "model": "Nexon",
+      "year": 2023,
+      "images": [
+        "https://stimg.cardekho.com/images/carexteriorimages/630x420/Tata/Nexon/9675/1743060431849/front-left-side-47.jpg"
+      ],
+      "price": {
+        "hourly": 100,
+        "daily": 550,
+        "weekly": 3200
+      },
+      "specifications": {
+        "seats": 5,
+        "fuelType": "Petrol",
+        "transmission": "Automatic",
+        "engineCapacity": "1.2L",
+        "mileage": "18 km/l",
+        "features": [
+          "AC",
+          "Power Steering",
+          "Power Windows",
+          "Bluetooth"
+        ]
+      },
+      "availability": false,
+      "rating": 4.3,
+      "reviews": 78
+    },
+    {
+      "id": "4",
+      "name": "Maruti Swift",
+      "type": "car",
+      "brand": "Maruti",
+      "model": "Swift",
+      "year": 2022,
+      "images": [
+        "https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg"
+      ],
+      "price": {
+        "hourly": 80,
+        "daily": 450,
+        "weekly": 2700
+      },
+      "specifications": {
+        "seats": 5,
+        "fuelType": "Petrol",
+        "transmission": "Manual",
+        "engineCapacity": "1.2L",
+        "mileage": "21 km/l",
+        "features": [
+          "AC",
+          "Power Steering",
+          "Power Windows",
+          "Bluetooth"
+        ]
+      },
+      "availability": false,
+      "rating": 4.2,
+      "reviews": 130
+    },
+    {
+      "id": "5",
+      "name": "Mahindra Thar",
+      "type": "car",
+      "brand": "Mahindra",
+      "model": "Thar",
+      "year": 2023,
+      "images": [
+        "https://images.pexels.com/photos/358070/pexels-photo-358070.jpeg"
+      ],
+      "price": {
+        "hourly": 140,
+        "daily": 750,
+        "weekly": 4300
+      },
+      "specifications": {
+        "seats": 4,
+        "fuelType": "Diesel",
+        "transmission": "Manual",
+        "engineCapacity": "2.2L",
+        "mileage": "15 km/l",
+        "features": [
+          "AC",
+          "Power Steering",
+          "4x4 Drive",
+          "Bluetooth"
+        ]
+      },
+      "availability": true,
+      "rating": 4.8,
+      "reviews": 65
+    },
+    {
+      "id": "6",
+      "name": "Royal Enfield Classic 350",
+      "type": "bike",
+      "brand": "Royal Enfield",
+      "model": "Classic 350",
+      "year": 2022,
+      "images": [
+        "https://images.pexels.com/photos/1413412/pexels-photo-1413412.jpeg"
+      ],
+      "price": {
+        "hourly": 50,
+        "daily": 300,
+        "weekly": 1800
+      },
+      "specifications": {
+        "engineCapacity": "350cc",
+        "mileage": "35 km/l",
+        "features": [
+          "Disc Brakes",
+          "Electric Start",
+          "Helmet Included"
+        ]
+      },
+      "availability": false,
+      "rating": 4.6,
+      "reviews": 110
+    }
+  ],
+  "bookings": [
+    {
+      "id": "1781012861765",
+      "userId": "2",
+      "vehicleId": "3",
+      "vehicleName": "Tata Nexon",
+      "startDate": "2026-06-09",
+      "endDate": "2026-06-10",
+      "totalPrice": "605.00",
+      "status": "confirmed",
+      "paymentMethod": "upi",
+      "transactionId": "UPI1781012861765",
+      "createdAt": "2026-06-09T13:47:41.765Z"
+    },
+    {
+      "id": "1781014908972",
+      "userId": "1781014888949",
+      "vehicleId": "6",
+      "vehicleName": "Royal Enfield Classic 350",
+      "startDate": "2026-06-09",
+      "endDate": "2026-06-10",
+      "totalPrice": "330.00",
+      "status": "cancelled",
+      "paymentMethod": "upi",
+      "transactionId": "UPI1781014908972",
+      "createdAt": "2026-06-09T14:21:48.972Z"
+    },
+    {
+      "id": "1781015648197",
+      "userId": "8e116cb8-1615-4c30-b19c-89406509a5cd",
+      "vehicleId": "4",
+      "vehicleName": "Maruti Swift",
+      "startDate": "2026-06-09",
+      "endDate": "2026-06-10",
+      "totalPrice": "495.00",
+      "status": "cancelled",
+      "paymentMethod": "upi",
+      "transactionId": "UPI1781015648197",
+      "createdAt": "2026-06-09T14:34:08.197Z"
+    },
+    {
+      "id": "1781017136783",
+      "userId": "8e116cb8-1615-4c30-b19c-89406509a5cd",
+      "vehicleId": "6",
+      "vehicleName": "Royal Enfield Classic 350",
+      "startDate": "2026-06-09",
+      "endDate": "2026-06-10",
+      "totalPrice": "330.00",
+      "status": "confirmed",
+      "paymentMethod": "upi",
+      "transactionId": "UPI1781017136783",
+      "createdAt": "2026-06-09T14:58:56.783Z"
+    },
+    {
+      "id": "1781017680329",
+      "userId": "8e116cb8-1615-4c30-b19c-89406509a5cd",
+      "vehicleId": "2",
+      "vehicleName": "Hyundai Creta",
+      "startDate": "2026-06-09",
+      "endDate": "2026-06-10",
+      "totalPrice": "715.00",
+      "status": "confirmed",
+      "paymentMethod": "upi",
+      "transactionId": "UPI1781017680329",
+      "createdAt": "2026-06-09T15:08:00.329Z"
+    },
+    {
+      "id": "1781018655859",
+      "userId": "8e116cb8-1615-4c30-b19c-89406509a5cd",
+      "vehicleId": "3",
+      "vehicleName": "Tata Nexon",
+      "startDate": "2026-06-09",
+      "endDate": "2026-06-10",
+      "totalPrice": "605.00",
+      "status": "confirmed",
+      "paymentMethod": "upi",
+      "transactionId": "UPI1781018655859",
+      "createdAt": "2026-06-09T15:24:15.859Z"
+    },
+    {
+      "id": "1781019109825",
+      "userId": "8e116cb8-1615-4c30-b19c-89406509a5cd",
+      "vehicleId": "4",
+      "vehicleName": "Maruti Swift",
+      "startDate": "2026-06-09",
+      "endDate": "2026-06-10",
+      "totalPrice": "495.00",
+      "status": "confirmed",
+      "paymentMethod": "upi",
+      "transactionId": "UPI1781019109825",
+      "createdAt": "2026-06-09T15:31:49.825Z"
+    },
+    {
+      "id": "1781019291638",
+      "userId": "8e116cb8-1615-4c30-b19c-89406509a5cd",
+      "vehicleId": "5",
+      "vehicleName": "Mahindra Thar",
+      "startDate": "2026-06-09",
+      "endDate": "2026-06-10",
+      "totalPrice": "825.00",
+      "status": "confirmed",
+      "paymentMethod": "upi",
+      "transactionId": "UPI1781019291638",
+      "createdAt": "2026-06-09T15:34:51.638Z"
+    },
+    {
+      "id": "1781020616071",
+      "userId": "8e116cb8-1615-4c30-b19c-89406509a5cd",
+      "vehicleId": "1",
+      "vehicleName": "Toyota Innova Crysta",
+      "startDate": "2026-06-09",
+      "endDate": "2026-06-10",
+      "totalPrice": "2896.00",
+      "status": "confirmed",
+      "paymentMethod": "upi",
+      "transactionId": "UPI1781020616071",
+      "createdAt": "2026-06-09T15:56:56.071Z"
+    },
+    {
+      "id": "1781021652155",
+      "userId": "8e116cb8-1615-4c30-b19c-89406509a5cd",
+      "vehicleId": "6",
+      "vehicleName": "Royal Enfield Classic 350",
+      "startDate": "2026-06-09",
+      "endDate": "2026-06-09",
+      "totalPrice": "2056.00",
+      "status": "confirmed",
+      "paymentMethod": "upi",
+      "transactionId": "UPI1781021652155",
+      "createdAt": "2026-06-09T16:14:12.155Z"
+    },
+    {
+      "id": "1781021937257",
+      "userId": "8e116cb8-1615-4c30-b19c-89406509a5cd",
+      "vehicleId": "2",
+      "vehicleName": "Hyundai Creta",
+      "startDate": "2026-06-09",
+      "endDate": "2026-06-10",
+      "totalPrice": "19024.00",
+      "status": "confirmed",
+      "paymentMethod": "upi",
+      "transactionId": "UPI1781021937257",
+      "createdAt": "2026-06-09T16:18:57.257Z"
+    },
+    {
+      "id": "1782017603240",
+      "userId": "8e116cb8-1615-4c30-b19c-89406509a5cd",
+      "vehicleId": "3",
+      "vehicleName": "Tata Nexon",
+      "startDate": "2026-06-21",
+      "endDate": "2026-06-22",
+      "totalPrice": "2616.00",
+      "status": "confirmed",
+      "paymentMethod": "upi",
+      "transactionId": "UPI1782017603240",
+      "createdAt": "2026-06-21T04:53:23.240Z"
+    },
+    {
+      "id": "1782017808098",
+      "userId": "8e116cb8-1615-4c30-b19c-89406509a5cd",
+      "vehicleId": "4",
+      "vehicleName": "Maruti Swift",
+      "startDate": "2026-06-21",
+      "endDate": "2026-06-22",
+      "totalPrice": "2504.00",
+      "status": "confirmed",
+      "paymentMethod": "creditCard",
+      "transactionId": "TXN1782017808098",
+      "createdAt": "2026-06-21T04:56:48.098Z"
+    }
+  ],
+  "users": [
+    {
+      "id": "1",
+      "name": "Admin User",
+      "email": "admin@example.com",
+      "password": "admin123",
+      "role": "admin"
+    },
+    {
+      "id": "2",
+      "name": "Test User",
+      "email": "user@example.com",
+      "password": "user123",
+      "role": "user"
+    },
+    {
+      "id": "1781014888949",
+      "email": "shahtanmay132@gmail.com",
+      "password": "Vehicle1324@",
+      "name": "Tanmay shah",
+      "role": "user"
+    }
+  ],
+  "ads": [
+    {
+      "id": "1",
+      "title": "Special Monsoon Offer!",
+      "description": "Get up to 25% off on all SUV rentals this season. Book now and explore the rain!",
+      "image": "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&q=80&w=1000",
+      "color": "from-blue-600 to-indigo-700",
+      "link": "/vehicles?type=car"
+    },
+    {
+      "id": "2",
+      "title": "Weekend Rider Special",
+      "description": "Rent any cruiser bike for 2 days and get the 3rd day at half price!",
+      "image": "https://images.unsplash.com/photo-1558981403-c5f91cbba527?auto=format&fit=crop&q=80&w=1000",
+      "color": "from-orange-500 to-red-600",
+      "link": "/vehicles?type=bike"
+    }
+  ],
+  "settings": [
+    {
+      "id": "global",
+      "system_name": "TSWheels",
+      "contact_email": "support@tswheels.com",
+      "tax_rate": 12,
+      "security_deposit": 2000,
+      "terms_and_conditions": "By renting a vehicle, you agree to return it in the same condition as received. A security deposit is required.",
+      "maintenance_mode": false
+    }
+  ]
+}

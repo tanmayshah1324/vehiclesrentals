@@ -33,30 +33,17 @@ export const AuthProvider = ({ children }) => {
                         if (parsed.email === session.user.email) return;
                     }
 
-                    // Fetch or create profile for OAuth user
-                    const { data: profile } = await supabase
-                        .from('profiles')
-                        .select('*')
-                        .eq('id', session.user.id)
-                        .maybeSingle();
-
-                    let userData;
-                    if (profile) {
-                        userData = { id: profile.id, name: profile.name, email: profile.email, role: profile.email === 'shahtanmay132@gmail.com' ? 'admin' : profile.role };
-                    } else {
-                        // Create profile for new OAuth user
-                        const name = session.user.user_metadata?.full_name || session.user.user_metadata?.name || session.user.email?.split('@')[0] || 'User';
-                        const defaultRole = session.user.email === 'shahtanmay132@gmail.com' ? 'admin' : 'user';
-                        const { data: newProfile } = await supabase
-                            .from('profiles')
-                            .insert({ id: session.user.id, name, email: session.user.email, role: defaultRole })
-                            .select()
-                            .single();
-
-                        userData = newProfile
-                            ? { id: newProfile.id, name: newProfile.name, email: newProfile.email, role: newProfile.email === 'shahtanmay132@gmail.com' ? 'admin' : newProfile.role }
-                            : { id: session.user.id, name, email: session.user.email, role: defaultRole };
-                    }
+                    // For MongoDB backend, we skip the Supabase 'profiles' table query
+                    // and just use the session data directly, or sync it with the MongoDB API
+                    const name = session.user.user_metadata?.full_name || session.user.user_metadata?.name || session.user.email?.split('@')[0] || 'User';
+                    const defaultRole = session.user.email === 'shahtanmay132@gmail.com' ? 'admin' : 'user';
+                    
+                    const userData = {
+                        id: session.user.id,
+                        name,
+                        email: session.user.email,
+                        role: defaultRole
+                    };
 
                     setUser(userData);
                     localStorage.setItem('user', JSON.stringify(userData));

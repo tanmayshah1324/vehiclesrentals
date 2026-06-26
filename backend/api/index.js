@@ -188,8 +188,9 @@ app.post('/api/easebuzz/initiate', async (req, res) => {
   formData.append('firstname', firstname);
   formData.append('phone', phone);
   formData.append('email', email);
-  formData.append('surl', 'http://localhost:3001/api/easebuzz/success'); // Needs ENV URL for prod
-  formData.append('furl', 'http://localhost:3001/api/easebuzz/failure');
+  const backendUrl = process.env.BACKEND_URL || 'https://backend-nu-jet-88.vercel.app';
+  formData.append('surl', `${backendUrl}/api/easebuzz/success`);
+  formData.append('furl', `${backendUrl}/api/easebuzz/failure`);
   formData.append('hash', hash);
 
   try {
@@ -214,14 +215,14 @@ app.post('/api/easebuzz/initiate', async (req, res) => {
 app.post('/api/easebuzz/success', async (req, res) => {
   const { txnid } = req.body;
   await Booking.findOneAndUpdate({id: txnid}, {status: 'confirmed'});
-  const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+  const frontendUrl = process.env.FRONTEND_URL || 'https://frontend-ten-beta-64.vercel.app';
   res.redirect(`${frontendUrl}/bookings?payment=success&txnid=${txnid}`);
 });
 
 app.post('/api/easebuzz/failure', async (req, res) => {
   const { txnid } = req.body;
   await Booking.findOneAndUpdate({id: txnid}, {status: 'cancelled'});
-  const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+  const frontendUrl = process.env.FRONTEND_URL || 'https://frontend-ten-beta-64.vercel.app';
   res.redirect(`${frontendUrl}/bookings?payment=failure&txnid=${txnid}`);
 });
 
@@ -264,7 +265,4 @@ async function seedData() {
 }
 mongoose.connection.once('open', seedData);
 
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
-  console.log(`Production Backend Server running on port ${PORT}`);
-});
+module.exports = app;
