@@ -4,14 +4,24 @@ import { format } from 'date-fns';
 import { vehicles } from '../../data/vehicles';
 import { useAuth } from '../../context/AuthContext';
 import toast from 'react-hot-toast';
-import { BookingFormData } from '../../types';
+
+export interface BookingFormData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  pickupLocation: string;
+  startDate: string;
+  endDate: string;
+  rentalType: 'hourly' | 'daily' | 'weekly';
+}
 import { Calendar, Clock, User, CreditCard, Mail, Phone, MapPin, ChevronRight } from 'lucide-react';
 
 const BookingForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const location = useLocation();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user } = useAuth() as { user: any };
 
   const [vehicle, setVehicle] = useState<any>(null);
   const [loading, setLoading] = useState(true);
