@@ -6,15 +6,17 @@ services:
     buildCommand: npm install --production
     startCommand: npm start
     envVars:
+      - key: NODE_VERSION
+        value: "20.19.0"
       - key: NODE_ENV
         value: production
       - key: MONGODB_URI
-        sync: false
+        value: mongodb+srv://tanmay:tanmay@cluster0.f1fusyw.mongodb.net/?appName=Cluster0
       - key: JWT_SECRET
-        sync: false
+        value: your_jwt_secret_key
       - key: EASEBUZZ_KEY
-        sync: false
+        value: 2JRJU40RU
       - key: EASEBUZZ_SALT
-        sync: false
+        value: 3UW7CPPBT
       - key: RESEND_API_KEY
-        sync: false
+        value: re_hnWedhMu_Dw6KTiw8qiXXmKQN7FByugvq
