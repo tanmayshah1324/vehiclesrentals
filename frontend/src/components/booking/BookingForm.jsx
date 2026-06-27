@@ -205,7 +205,16 @@ const BookingForm = () => {
       status: 'confirmed',
       paymentMethod: 'upi',
       transactionId: 'UPI' + Date.now(),
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
+      customerName: user?.name || formData.fullName || '',
+      customerEmail: user?.email || formData.email || '',
+      vehicleNumber: vehicle.registrationNumber || '',
+      vehicleCategory: vehicle.category || '',
+      vehicleFuelType: vehicle.specifications?.fuelType || '',
+      vehicleTransmission: vehicle.specifications?.transmission || '',
+      vehicleHub: vehicle.rentalHub || '',
+      vehicleImage: vehicle.images?.[0] || '',
+      securityDeposit: securityDeposit || 2000
     };
 
     try {
@@ -263,7 +272,16 @@ const BookingForm = () => {
       status: 'confirmed',
       paymentMethod: method,
       transactionId: transactionId,
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
+      customerName: user?.name || formData.fullName || '',
+      customerEmail: user?.email || formData.email || '',
+      vehicleNumber: vehicle.registrationNumber || '',
+      vehicleCategory: vehicle.category || '',
+      vehicleFuelType: vehicle.specifications?.fuelType || '',
+      vehicleTransmission: vehicle.specifications?.transmission || '',
+      vehicleHub: vehicle.rentalHub || '',
+      vehicleImage: vehicle.images?.[0] || '',
+      securityDeposit: securityDeposit || 2000
     };
 
     try {

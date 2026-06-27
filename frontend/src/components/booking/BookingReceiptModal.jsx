@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { apiService } from '../../services/apiService';
 import { X, Download, Mail, CheckCircle, Calendar, MapPin, CreditCard, ShieldCheck, Loader2 } from 'lucide-react';
+import { format } from 'date-fns';
+import api from '../../config/api';
 
 const BookingReceiptModal = ({ booking, onClose }) => {
     if (!booking) return null;
@@ -38,23 +40,19 @@ const BookingReceiptModal = ({ booking, onClose }) => {
         setPdfLoading(true);
         setMessage(null);
         try {
-            const response = await fetch('http://localhost:3001/api/generate-receipt-pdf', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    booking: {
-                        ...booking,
-                        customerName: booking.customerName || 'Customer',
-                        customerEmail: booking.customerEmail || '',
-                        vehicleImage: vehicle?.images?.[0] || '',
-                        vehicleFeatures: vehicle?.specifications?.features || [],
-                        vehicleSpecs: vehicle?.specifications || {},
-                        rtoNumber: vehicle?.rtoNumber || 'MH-01-XX-0000',
-                    }
-                })
-            });
-            if (!response.ok) throw new Error('Failed to generate PDF');
-            const blob = await response.blob();
+            const response = await api.post(`/api/generate-receipt-pdf`, {
+                booking: {
+                    ...booking,
+                    customerName: booking.customerName || 'Customer',
+                    customerEmail: booking.customerEmail || '',
+                    vehicleImage: vehicle?.images?.[0] || '',
+                    vehicleFeatures: vehicle?.specifications?.features || [],
+                    vehicleSpecs: vehicle?.specifications || {},
+                    rtoNumber: vehicle?.rtoNumber || 'MH-01-XX-0000',
+                }
+            }, { responseType: 'blob' });
+
+            const blob = response.data;
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
@@ -81,10 +79,14 @@ const BookingReceiptModal = ({ booking, onClose }) => {
                 booking.customerEmail || 'shahtanmay132@gmail.com',
                 {
                     ...booking,
-                    vehicleImage: vehicle?.images?.[0] || '',
-                    vehicleFeatures: vehicle?.specifications?.features || [],
-                    vehicleSpecs: vehicle?.specifications || {},
-                    rtoNumber: vehicle?.rtoNumber || 'MH-01-XX-0000',
+                    customerName: booking.customerName || booking.user?.name || '',
+                    vehicleImage: booking.vehicleImage || vehicle?.images?.[0] || '',
+                    vehicleBrand: booking.vehicleBrand || vehicle?.brand || '',
+                    vehicleCategory: booking.vehicleCategory || vehicle?.category || '',
+                    vehicleFuelType: booking.vehicleFuelType || vehicle?.specifications?.fuelType || '',
+                    vehicleTransmission: booking.vehicleTransmission || vehicle?.specifications?.transmission || '',
+                    vehicleHub: booking.vehicleHub || vehicle?.rentalHub || '',
+                    rtoNumber: booking.vehicleNumber || booking.rtoNumber || vehicle?.registrationNumber || 'MH-01-XX-0000',
                 }
             );
             if (result?.success) {

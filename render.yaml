@@ -10,8 +10,16 @@ services:
         value: "20.19.0"
       - key: NODE_ENV
         value: production
-      - key: MONGODB_URI
-        value: mongodb+srv://tanmay:tanmay@cluster0.f1fusyw.mongodb.net/?appName=Cluster0
+      - key: SUPABASE_URL
+        value: https://ckiqrybmvkogklxjtvun.supabase.co
+      - key: SUPABASE_PUBLISHABLE_KEY
+        value: placeholder_key
+      - key: SUPABASE_ANON_KEY
+        value: placeholder_key
+      - key: SUPABASE_SECRET_KEY
+        value: placeholder_secret
+      - key: SUPABASE_JWKS_URL
+        value: https://ckiqrybmvkogklxjtvun.supabase.co/auth/v1/.well-known/jwks.json
       - key: JWT_SECRET
         value: your_jwt_secret_key
       - key: EASEBUZZ_KEY
@@ -19,4 +27,4 @@ services:
       - key: EASEBUZZ_SALT
         value: 3UW7CPPBT
       - key: RESEND_API_KEY
-        value: re_hnWedhMu_Dw6KTiw8qiXXmKQN7FByugvq
+        value: placeholder_resend_key

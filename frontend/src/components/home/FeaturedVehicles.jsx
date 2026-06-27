@@ -24,8 +24,8 @@ const FeaturedVehicles = () => {
     }, []);
     // Get 4 featured vehicles (2 cars and 2 bikes)
     const featuredVehicles = [
-        ...vehicles.filter(v => v.type === 'car' && v.availability).slice(0, 2),
-        ...vehicles.filter(v => v.type === 'bike' && v.availability).slice(0, 2)
+        ...vehicles.filter(v => v.type?.toLowerCase() === 'car' && v.availability).slice(0, 2),
+        ...vehicles.filter(v => v.type?.toLowerCase() === 'bike' && v.availability).slice(0, 2)
     ];
     return (<section className="py-16 bg-white dark:bg-gray-900">
       <div className="container mx-auto px-4">

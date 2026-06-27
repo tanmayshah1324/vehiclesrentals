@@ -57,7 +57,7 @@ const VehiclesPage = () => {
     }, []);
     const filteredVehicles = vehicles.filter((vehicle) => {
         // Filter by type
-        if (type !== 'all' && vehicle.type !== type) {
+        if (type !== 'all' && vehicle.type?.toLowerCase() !== type?.toLowerCase()) {
             return false;
         }
         // Filter by brand
@@ -148,7 +148,7 @@ const VehiclesPage = () => {
           </button>
         </div>) : filteredVehicles.length === 0 ? (<div className="py-12 text-center">
           <h3 className="mb-2 text-xl font-medium text-gray-700 dark:text-gray-300">
-            No vehicles found
+            {type === 'car' ? 'No Cars Available' : type === 'bike' ? 'No Bikes Available' : 'No vehicles found'}
           </h3>
           <p className="text-gray-500 dark:text-gray-400">
             Try adjusting your filters or search criteria

@@ -2,18 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Calendar, Clock, MapPin, Package, AlertCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import api from '../config/api';
 
 const UserBookingsPage: React.FC = () => {
   const [bookings, setBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const { user } = useAuth();
+  const { user } = useAuth() as { user: any };
 
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/bookings?userId=${user?.id}`);
-        const data = await response.json();
-        setBookings(data);
+        const response = await api.get(`/bookings?userId=${user?.id}`);
+        setBookings(response.data);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching bookings:', error);

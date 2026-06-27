@@ -16,6 +16,7 @@ export interface BookingFormData {
   rentalType: 'hourly' | 'daily' | 'weekly';
 }
 import { Calendar, Clock, User, CreditCard, Mail, Phone, MapPin, ChevronRight } from 'lucide-react';
+import api from '../../config/api';
 
 const BookingForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -32,9 +33,8 @@ const BookingForm: React.FC = () => {
   useEffect(() => {
     const fetchVehicle = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/vehicles/${id}`);
-        const data = await response.json();
-        setVehicle(data);
+        const response = await api.get(`/vehicles/${id}`);
+        setVehicle(response.data);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching vehicle:', error);
@@ -140,20 +140,15 @@ const BookingForm: React.FC = () => {
         // --- Easebuzz Integration ---
         const productinfo = `Booking for ${vehicle.name}`;
         
-        // 1. Initiate Payment via Backend
-        const initiateResponse = await fetch('http://localhost:3001/api/easebuzz/initiate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            txnid,
-            amount: totalAmount,
-            productinfo,
-            firstname: formData.firstName,
-            email: formData.email,
-            phone: formData.phone
-          })
+        const initiateResponse = await api.post('/api/easebuzz/initiate', {
+          txnid,
+          amount: totalAmount,
+          productinfo,
+          firstname: formData.firstName,
+          email: formData.email,
+          phone: formData.phone
         });
-        const easebuzzData = await initiateResponse.json();
+        const easebuzzData = initiateResponse.data;
 
         if (easebuzzData.status === 1 && easebuzzData.data) {
           // Save pending booking
@@ -171,11 +166,7 @@ const BookingForm: React.FC = () => {
             createdAt: new Date().toISOString()
           };
 
-          await fetch('http://localhost:3001/bookings', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(bookingData)
-          });
+          await api.post('/bookings', bookingData);
 
           // Redirect to Easebuzz Hosted Checkout
           window.location.href = `https://testpay.easebuzz.in/pay/${easebuzzData.data}`;
@@ -188,14 +179,8 @@ const BookingForm: React.FC = () => {
         }
       }
 
-      // Simulate UPI Payment
-      const paymentResponse = await fetch('http://localhost:3001/simulate-upi-payment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount: totalAmount, upiId: upiId })
-      });
-      
-      const paymentData = await paymentResponse.json();
+      const paymentResponse = await api.post('/simulate-upi-payment', { amount: totalAmount, upiId: upiId });
+      const paymentData = paymentResponse.data;
       
       if (paymentData.status !== 'success') {
         toast.error('Payment failed. Please try again.');
@@ -221,13 +206,9 @@ const BookingForm: React.FC = () => {
         createdAt: new Date().toISOString()
       };
 
-      const bookingResponse = await fetch('http://localhost:3001/bookings', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(bookingData)
-      });
+      const bookingResponse = await api.post('/bookings', bookingData);
 
-      if (bookingResponse.ok) {
+      if (bookingResponse.status === 200 || bookingResponse.status === 201) {
         toast.success('Booking confirmed successfully!');
         navigate('/bookings', { replace: true });
       } else {

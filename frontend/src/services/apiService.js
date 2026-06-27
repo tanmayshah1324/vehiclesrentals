@@ -1,9 +1,11 @@
 import { supabase } from '../lib/supabaseClient';
+import api from '../config/api';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
-// Helper to determine if we use Supabase
-const useSupabase = () => !!supabase;
+
+// Helper to determine if we use Supabase directly from frontend
+// Set to false to force all requests through the Node.js backend (which has full Service Role access)
+const useSupabase = () => false;
 
 // Helper for queries (fetch actions)
 const runQuery = async (supabaseCall, localCall, mapSupabaseData = (d) => d) => {
@@ -12,15 +14,18 @@ const runQuery = async (supabaseCall, localCall, mapSupabaseData = (d) => d) => 
             const { data, error } = await supabaseCall();
             if (error) {
                 console.warn('[Database] Supabase query failed, falling back to Local JSON Server:', error.message);
-                return await localCall();
+                const localData = await localCall();
+                return mapSupabaseData(localData);
             }
             return mapSupabaseData(data);
         } catch (err) {
             console.warn('[Database] Supabase exception, falling back to Local JSON Server:', err.message);
-            return await localCall();
+            const localData = await localCall();
+            return mapSupabaseData(localData);
         }
     } else {
-        return await localCall();
+        const localData = await localCall();
+        return mapSupabaseData(localData);
     }
 };
 
@@ -31,15 +36,18 @@ const runWrite = async (supabaseCall, localCall, mapSupabaseData = (d) => d) => 
             const { data, error } = await supabaseCall();
             if (error) {
                 console.warn('[Database] Supabase write failed, falling back to Local JSON Server:', error.message);
-                return await localCall();
+                const localData = await localCall();
+                return mapSupabaseData(localData);
             }
             return mapSupabaseData(data);
         } catch (err) {
             console.warn('[Database] Supabase write exception, falling back to Local JSON Server:', err.message);
-            return await localCall();
+            const localData = await localCall();
+            return mapSupabaseData(localData);
         }
     } else {
-        return await localCall();
+        const localData = await localCall();
+        return mapSupabaseData(localData);
     }
 };
 
@@ -49,15 +57,16 @@ const mapVehicleToFrontend = (v) => {
     return {
         id: v.id,
         name: v.name,
+        type: v.type || '',
         brand: v.brand,
         model: v.model,
         year: v.year,
         images: v.images || [],
         price: {
-            hourly: parseFloat(v.price_hourly) || 0,
-            daily: parseFloat(v.price_daily) || 0,
-            weekly: parseFloat(v.price_weekly) || 0,
-            monthly: parseFloat(v.price_monthly) || 0
+            hourly: v.price?.hourly || parseFloat(v.price_hourly) || 0,
+            daily: v.price?.daily || parseFloat(v.price_daily) || 0,
+            weekly: v.price?.weekly || parseFloat(v.price_weekly) || 0,
+            monthly: v.price?.monthly || parseFloat(v.price_monthly) || 0
         },
         registrationNumber: v.registration_number || '',
         category: v.category || '',
@@ -65,12 +74,12 @@ const mapVehicleToFrontend = (v) => {
         insuranceExpiry: v.insurance_expiry || '',
         pucExpiry: v.puc_expiry || '',
         specifications: {
-            engineCapacity: v.engine_capacity || '',
-            mileage: v.mileage || '',
-            features: v.features || [],
-            seats: v.seats || 5,
-            fuelType: v.fuel_type || 'Petrol',
-            transmission: v.transmission || 'Automatic'
+            engineCapacity: v.specifications?.engineCapacity || v.engine_capacity || '',
+            mileage: v.specifications?.mileage || v.mileage || '',
+            features: v.specifications?.features || v.features || [],
+            seats: v.specifications?.seats || v.seats || 5,
+            fuelType: v.specifications?.fuelType || v.fuel_type || 'Petrol',
+            transmission: v.specifications?.transmission || v.transmission || 'Automatic'
         },
         availability: v.availability,
         rating: parseFloat(v.rating) || 5.0,
@@ -83,6 +92,7 @@ const mapVehicleToBackend = (v) => {
     return {
         id: v.id,
         name: v.name,
+        type: v.type || '',
         brand: v.brand,
         model: v.model,
         year: v.year,
@@ -307,14 +317,12 @@ export const apiService = {
             }
 
             async function fallbackLogin() {
-                const response = await fetch(`${API_URL}/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
-                });
-                const data = await response.json();
-                if (!response.ok) throw new Error(data.error || 'Invalid credentials');
-                return data;
+                try {
+                    const response = await api.post('/login', { email, password });
+                    return response.data;
+                } catch (error) {
+                    throw new Error(error.response?.data?.error || 'Invalid credentials');
+                }
             }
         },
 
@@ -372,14 +380,12 @@ export const apiService = {
             }
 
             async function fallbackSignup() {
-                const response = await fetch(`${API_URL}/signup`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, password })
-                });
-                const data = await response.json();
-                if (!response.ok) throw new Error(data.error || 'Signup failed');
-                return data;
+                try {
+                    const response = await api.post('/signup', { name, email, password });
+                    return response.data;
+                } catch (error) {
+                    throw new Error(error.response?.data?.error || 'Signup failed');
+                }
             }
         },
 
@@ -399,10 +405,7 @@ export const apiService = {
         getAll: async () => {
             return runQuery(
                 () => supabase.from('vehicles').select('*'),
-                async () => {
-                    const response = await fetch(`${API_URL}/vehicles`);
-                    return await response.json();
-                },
+                async () => { const response = await api.get(`/vehicles`); return response.data; },
                 (data) => data.map(mapVehicleToFrontend)
             );
         },
@@ -410,10 +413,7 @@ export const apiService = {
         getById: async (id) => {
             return runQuery(
                 () => supabase.from('vehicles').select('*').eq('id', id).single(),
-                async () => {
-                    const response = await fetch(`${API_URL}/vehicles/${id}`);
-                    return await response.json();
-                },
+                async () => { const response = await api.get(`/vehicles/${id}`); return response.data; },
                 mapVehicleToFrontend
             );
         },
@@ -422,12 +422,8 @@ export const apiService = {
             return runWrite(
                 () => supabase.from('vehicles').insert(mapVehicleToBackend(vehicle)).select().single(),
                 async () => {
-                    const response = await fetch(`${API_URL}/vehicles`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(vehicle)
-                    });
-                    return await response.json();
+                    const response = await api.post(`/vehicles`, vehicle);
+                    return response.data;
                 },
                 mapVehicleToFrontend
             );
@@ -437,12 +433,8 @@ export const apiService = {
             return runWrite(
                 () => supabase.from('vehicles').update(mapVehicleToBackend(vehicle)).eq('id', id).select().single(),
                 async () => {
-                    const response = await fetch(`${API_URL}/vehicles/${id}`, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(vehicle)
-                    });
-                    return await response.json();
+                    const response = await api.put(`/vehicles/${id}`, vehicle);
+                    return response.data;
                 },
                 mapVehicleToFrontend
             );
@@ -452,10 +444,8 @@ export const apiService = {
             return runWrite(
                 () => supabase.from('vehicles').delete().eq('id', id),
                 async () => {
-                    const response = await fetch(`${API_URL}/vehicles/${id}`, {
-                        method: 'DELETE'
-                    });
-                    return response.ok;
+                    const response = await api.delete(`/vehicles/${id}`);
+                    return response.status >= 200 && response.status < 300;
                 },
                 () => true
             );
@@ -465,12 +455,8 @@ export const apiService = {
             return runWrite(
                 () => supabase.from('vehicles').update({ availability }).eq('id', id),
                 async () => {
-                    const response = await fetch(`${API_URL}/vehicles/${id}`, {
-                        method: 'PATCH',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ availability })
-                    });
-                    return response.ok;
+                    const response = await api.patch(`/vehicles/${id}`, { availability });
+                    return response.status >= 200 && response.status < 300;
                 },
                 () => true
             );
@@ -482,10 +468,7 @@ export const apiService = {
         getAll: async () => {
             return runQuery(
                 () => supabase.from('bookings').select('*'),
-                async () => {
-                    const response = await fetch(`${API_URL}/bookings`);
-                    return await response.json();
-                },
+                async () => { const response = await api.get(`/bookings`); return response.data; },
                 (data) => data.map(mapBookingToFrontend)
             );
         },
@@ -493,10 +476,7 @@ export const apiService = {
         getByUserId: async (userId) => {
             return runQuery(
                 () => supabase.from('bookings').select('*').eq('user_id', userId),
-                async () => {
-                    const response = await fetch(`${API_URL}/bookings?userId=${userId}`);
-                    return await response.json();
-                },
+                async () => { const response = await api.get(`/bookings?userId=${userId}`); return response.data; },
                 (data) => data.map(mapBookingToFrontend)
             );
         },
@@ -505,12 +485,8 @@ export const apiService = {
             return runWrite(
                 () => supabase.from('bookings').insert(mapBookingToBackend(booking)).select().single(),
                 async () => {
-                    const response = await fetch(`${API_URL}/bookings`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(booking)
-                    });
-                    return await response.json();
+                    const response = await api.post(`/bookings`, booking);
+                    return response.data;
                 },
                 mapBookingToFrontend
             );
@@ -520,12 +496,8 @@ export const apiService = {
             return runWrite(
                 () => supabase.from('bookings').update({ status }).eq('id', id),
                 async () => {
-                    const response = await fetch(`${API_URL}/bookings/${id}`, {
-                        method: 'PATCH',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ status })
-                    });
-                    return response.ok;
+                    const response = await api.patch(`/bookings/${id}`, { status });
+                    return response.status >= 200 && response.status < 300;
                 },
                 () => true
             );
@@ -535,10 +507,8 @@ export const apiService = {
             return runWrite(
                 () => supabase.from('bookings').delete().eq('id', id),
                 async () => {
-                    const response = await fetch(`${API_URL}/bookings/${id}`, {
-                        method: 'DELETE'
-                    });
-                    return response.ok;
+                    const response = await api.delete(`/bookings/${id}`);
+                    return response.status >= 200 && response.status < 300;
                 },
                 () => true
             );
@@ -558,16 +528,12 @@ export const apiService = {
 
         sendConfirmationEmail: async (toEmail, bookingDetails) => {
             try {
-                const response = await fetch(`${API_URL}/api/send-email`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
+                const response = await api.post('/api/send-email', {
                         to: toEmail,
                         subject: 'Your Booking is Confirmed! - TSWheels',
                         booking: bookingDetails
-                    })
-                });
-                const data = await response.json();
+                    });
+                const data = response.data;
                 if (data.html) {
                     const newWindow = window.open('', '_blank');
                     if (newWindow) {
@@ -592,10 +558,7 @@ export const apiService = {
         getAll: async () => {
             return runQuery(
                 () => supabase.from('profiles').select('*'),
-                async () => {
-                    const response = await fetch(`${API_URL}/users`);
-                    return await response.json();
-                },
+                async () => { const response = await api.get(`/users`); return response.data; },
                 (data) => {
                     let users = data.map(mapUserToFrontend);
                     // Apply local overrides
@@ -642,11 +605,7 @@ export const apiService = {
         get: async () => {
             return runQuery(
                 () => supabase.from('settings').select('*').eq('id', 'global').maybeSingle(),
-                async () => {
-                    const response = await fetch(`${API_URL}/settings`);
-                    const data = await response.json();
-                    return Array.isArray(data) ? data[0] : data;
-                },
+                async () => { const response = await api.get(`/settings`); return Array.isArray(response.data) ? response.data[0] : response.data; },
                 mapSettingsToFrontend
             );
         },
@@ -655,12 +614,8 @@ export const apiService = {
             return runWrite(
                 () => supabase.from('settings').upsert(mapSettingsToBackend(settings)).select().single(),
                 async () => {
-                    const response = await fetch(`${API_URL}/settings`, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(mapSettingsToBackend(settings))
-                    });
-                    return await response.json();
+                    const response = await api.put(`/settings`, mapSettingsToBackend(settings));
+                    return response.data;
                 },
                 mapSettingsToFrontend
             );
@@ -671,10 +626,7 @@ export const apiService = {
         getAll: async () => {
             return runQuery(
                 () => supabase.from('ads').select('*'),
-                async () => {
-                    const response = await fetch(`${API_URL}/ads`);
-                    return await response.json();
-                }
+                async () => { const response = await api.get(`/ads`); return response.data; }
             );
         }
     },
@@ -683,10 +635,7 @@ export const apiService = {
         getAll: async () => {
             return runQuery(
                 () => supabase.from('vehicle_categories').select('*'),
-                async () => {
-                    const response = await fetch(`${API_URL}/categories`);
-                    return await response.json();
-                },
+                async () => { const response = await api.get(`/categories`); return response.data; },
                 (data) => data.map(mapCategoryToFrontend)
             );
         },
@@ -694,12 +643,8 @@ export const apiService = {
             return runWrite(
                 () => supabase.from('vehicle_categories').insert(mapCategoryToBackend(category)).select().single(),
                 async () => {
-                    const response = await fetch(`${API_URL}/categories`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(category)
-                    });
-                    return await response.json();
+                    const response = await api.post(`/categories`, category);
+                    return response.data;
                 },
                 mapCategoryToFrontend
             );
@@ -708,12 +653,8 @@ export const apiService = {
             return runWrite(
                 () => supabase.from('vehicle_categories').update(mapCategoryToBackend(category)).eq('id', id).select().single(),
                 async () => {
-                    const response = await fetch(`${API_URL}/categories/${id}`, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(category)
-                    });
-                    return await response.json();
+                    const response = await api.put(`/categories/${id}`, category);
+                    return response.data;
                 },
                 mapCategoryToFrontend
             );
@@ -722,10 +663,8 @@ export const apiService = {
             return runWrite(
                 () => supabase.from('vehicle_categories').delete().eq('id', id),
                 async () => {
-                    const response = await fetch(`${API_URL}/categories/${id}`, {
-                        method: 'DELETE'
-                    });
-                    return response.ok;
+                    const response = await api.delete(`/categories/${id}`);
+                    return response.status >= 200 && response.status < 300;
                 },
                 () => true
             );
@@ -736,10 +675,7 @@ export const apiService = {
         getAll: async () => {
             return runQuery(
                 () => supabase.from('rental_hubs').select('*'),
-                async () => {
-                    const response = await fetch(`${API_URL}/hubs`);
-                    return await response.json();
-                },
+                async () => { const response = await api.get(`/hubs`); return response.data; },
                 (data) => data.map(mapHubToFrontend)
             );
         },
@@ -747,12 +683,8 @@ export const apiService = {
             return runWrite(
                 () => supabase.from('rental_hubs').insert(mapHubToBackend(hub)).select().single(),
                 async () => {
-                    const response = await fetch(`${API_URL}/hubs`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(hub)
-                    });
-                    return await response.json();
+                    const response = await api.post(`/hubs`, hub);
+                    return response.data;
                 },
                 mapHubToFrontend
             );
@@ -761,12 +693,8 @@ export const apiService = {
             return runWrite(
                 () => supabase.from('rental_hubs').update(mapHubToBackend(hub)).eq('id', id).select().single(),
                 async () => {
-                    const response = await fetch(`${API_URL}/hubs/${id}`, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(hub)
-                    });
-                    return await response.json();
+                    const response = await api.put(`/hubs/${id}`, hub);
+                    return response.data;
                 },
                 mapHubToFrontend
             );
@@ -775,10 +703,8 @@ export const apiService = {
             return runWrite(
                 () => supabase.from('rental_hubs').delete().eq('id', id),
                 async () => {
-                    const response = await fetch(`${API_URL}/hubs/${id}`, {
-                        method: 'DELETE'
-                    });
-                    return response.ok;
+                    const response = await api.delete(`/hubs/${id}`);
+                    return response.status >= 200 && response.status < 300;
                 },
                 () => true
             );
